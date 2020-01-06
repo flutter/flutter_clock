@@ -8,22 +8,21 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:flutter/foundation.dart';
+
 enum _Element {
   background,
   text,
-  shadow,
 }
 
 final _lightTheme = {
-  _Element.background: Color(0xFF81B3FE),
-  _Element.text: Colors.white,
-  _Element.shadow: Colors.black,
+  _Element.background: Colors.white,
+  _Element.text: Colors.black,
 };
 
 final _darkTheme = {
   _Element.background: Colors.black,
   _Element.text: Colors.white,
-  _Element.shadow: Color(0xFF174EA6),
 };
 
 /// A basic digital clock.
@@ -39,7 +38,7 @@ class DigitalClock extends StatefulWidget {
 }
 
 class _DigitalClockState extends State<DigitalClock> {
-  DateTime _dateTime = DateTime.now();
+  DateTime _dateTime = DateTime.parse("1969-07-20 00:00:04Z");
   Timer _timer;
 
   @override
@@ -75,21 +74,21 @@ class _DigitalClockState extends State<DigitalClock> {
 
   void _updateTime() {
     setState(() {
-      _dateTime = DateTime.now();
+      _dateTime = _dateTime.add(new Duration(minutes: 1));
       // Update once per minute. If you want to update every second, use the
       // following code.
-      _timer = Timer(
-        Duration(minutes: 1) -
-            Duration(seconds: _dateTime.second) -
-            Duration(milliseconds: _dateTime.millisecond),
-        _updateTime,
-      );
-      // Update once per second, but make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
       // _timer = Timer(
-      //   Duration(seconds: 1) - Duration(milliseconds: _dateTime.millisecond),
+      //   Duration(minutes: 1) -
+      //       Duration(seconds: _dateTime.second) -
+      //       Duration(milliseconds: _dateTime.millisecond),
       //   _updateTime,
       // );
+      // Update once per second, but make sure to do it at the beginning of each
+      // new second, so that the clock is accurate.
+      _timer = Timer(
+        Duration(seconds: 1),
+        _updateTime,
+      );
     });
   }
 
@@ -101,33 +100,50 @@ class _DigitalClockState extends State<DigitalClock> {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
-    final offset = -fontSize / 7;
-    final defaultStyle = TextStyle(
+    final fontSize = MediaQuery.of(context).size.height * 0.29;
+    // final fontSize = 120.0;
+
+    final thinStyle = TextStyle(
       color: colors[_Element.text],
-      fontFamily: 'PressStart2P',
+      fontFamily: 'MontSerrat',
       fontSize: fontSize,
-      shadows: [
-        Shadow(
-          blurRadius: 0,
-          color: colors[_Element.shadow],
-          offset: Offset(10, 0),
-        ),
-      ],
     );
+    final boldStyle = TextStyle(
+      color: colors[_Element.text],
+      fontFamily: 'MontSerrat',
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
+    );
+
+    debugPrint('height: ${MediaQuery.of(context).size.height}');
+    debugPrint('width: ${MediaQuery.of(context).size.width}');
 
     return Container(
       color: colors[_Element.background],
-      child: Center(
-        child: DefaultTextStyle(
-          style: defaultStyle,
-          child: Stack(
-            children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
-            ],
-          ),
-        ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+              right: 435,
+              top: MediaQuery.of(context).size.height / 3.45,
+              child: Text(
+                hour,
+                style: boldStyle,
+              )),
+          Positioned(
+              left: 220,
+              top: MediaQuery.of(context).size.height / 3.45,
+              child: Text(
+                "PM",
+                style: thinStyle,
+              )),
+          Positioned(
+              left: 435,
+              top: MediaQuery.of(context).size.height / 3.45,
+              child: Text(
+                minute,
+                style: boldStyle,
+              )),
+        ],
       ),
     );
   }
