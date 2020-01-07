@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/foundation.dart';
+import 'animated_two_digits.dart';
 
 enum _Element {
   background,
@@ -37,14 +38,20 @@ class DigitalClock extends StatefulWidget {
   _DigitalClockState createState() => _DigitalClockState();
 }
 
-class _DigitalClockState extends State<DigitalClock> {
+class _DigitalClockState extends State<DigitalClock>
+    with TickerProviderStateMixin {
   DateTime _dateTime = DateTime.parse("1969-07-20 00:00:04Z");
   Timer _timer;
+  AnimationController _minuteController;
 
   @override
   void initState() {
     super.initState();
     widget.model.addListener(_updateModel);
+    _minuteController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
     _updateTime();
     _updateModel();
   }
@@ -58,9 +65,23 @@ class _DigitalClockState extends State<DigitalClock> {
     }
   }
 
+  Future _startMinuteAnimation() async {
+    try {
+      await _minuteController.forward().orCancel;
+    } on TickerCanceled {}
+  }
+
+  Future _resetMinuteAnimation() async {
+    try {
+      await _minuteController.reverse().orCancel;
+    } on TickerCanceled {}
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
+    _minuteController?.dispose();
+
     widget.model.removeListener(_updateModel);
     widget.model.dispose();
     super.dispose();
@@ -101,7 +122,6 @@ class _DigitalClockState extends State<DigitalClock> {
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
     final fontSize = MediaQuery.of(context).size.height * 0.29;
-    // final fontSize = 120.0;
 
     final thinStyle = TextStyle(
       color: colors[_Element.text],
@@ -138,10 +158,11 @@ class _DigitalClockState extends State<DigitalClock> {
               )),
           Positioned(
               left: 435,
-              top: MediaQuery.of(context).size.height / 3.45,
-              child: Text(
-                minute,
-                style: boldStyle,
+              child: GestureDetector(
+                onTap: _startMinuteAnimation,
+                onDoubleTap: _resetMinuteAnimation,
+                child: AnimatedTwoDigits(
+                    _minuteController, minute, boldStyle, context),
               )),
         ],
       ),
