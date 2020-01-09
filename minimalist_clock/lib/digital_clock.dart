@@ -71,10 +71,8 @@ class _DigitalClockState extends State<DigitalClock>
     } on TickerCanceled {}
   }
 
-  Future _resetMinuteAnimation() async {
-    try {
-      await _minuteController.reverse().orCancel;
-    } on TickerCanceled {}
+  void _resetMinuteAnimation() {
+    _minuteController.reset();
   }
 
   @override
@@ -107,10 +105,15 @@ class _DigitalClockState extends State<DigitalClock>
       // Update once per second, but make sure to do it at the beginning of each
       // new second, so that the clock is accurate.
       _timer = Timer(
-        Duration(seconds: 1),
+        Duration(seconds: 5),
         _updateTime,
       );
     });
+    _startMinuteAnimation();
+    Timer(
+      Duration(seconds: 1),
+      _resetMinuteAnimation,
+    );
   }
 
   @override
@@ -121,6 +124,8 @@ class _DigitalClockState extends State<DigitalClock>
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
+    final previousMinute =
+        DateFormat('mm').format(_dateTime.subtract(new Duration(minutes: 1)));
     final fontSize = MediaQuery.of(context).size.height * 0.29;
 
     final thinStyle = TextStyle(
@@ -134,9 +139,6 @@ class _DigitalClockState extends State<DigitalClock>
       fontSize: fontSize,
       fontWeight: FontWeight.bold,
     );
-
-    debugPrint('height: ${MediaQuery.of(context).size.height}');
-    debugPrint('width: ${MediaQuery.of(context).size.width}');
 
     return Container(
       color: colors[_Element.background],
@@ -157,13 +159,49 @@ class _DigitalClockState extends State<DigitalClock>
                 style: thinStyle,
               )),
           Positioned(
-              left: 435,
-              child: GestureDetector(
-                onTap: _startMinuteAnimation,
-                onDoubleTap: _resetMinuteAnimation,
-                child: AnimatedTwoDigits(
-                    _minuteController, minute, boldStyle, context),
-              )),
+            left: 440,
+            top: MediaQuery.of(context).size.height / 3.45,
+            child: GestureDetector(
+              child: Text(
+                minute,
+                style: boldStyle,
+              ),
+            ),
+          ),
+          Positioned(
+            left: 440,
+            child: AnimatedTwoDigits(_minuteController, previousMinute,
+                boldStyle, MediaQuery.of(context).size.height / 3.45, context),
+          ),
+          Positioned(
+            left: 440,
+            child: AnimatedTwoDigits(
+                _minuteController, minute, boldStyle, 0.0, context),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: MediaQuery.of(context).size.height / 1.7,
+            top: 0,
+            child: Container(
+                height: MediaQuery.of(context).size.height / 3.45,
+                width: MediaQuery.of(context).size.height / 3.45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                )),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: MediaQuery.of(context).size.height / 1.7,
+            child: Container(
+                height: MediaQuery.of(context).size.height / 3.45,
+                width: MediaQuery.of(context).size.height / 3.45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                )),
+          ),
         ],
       ),
     );
