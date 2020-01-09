@@ -19,6 +19,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: PressStart2P
+    - family: Spectral
       fonts:
-        - asset: third_party/PressStart2P-Regular.ttf
+        - asset: fonts/Spectral-Bold-Desktop.otf
