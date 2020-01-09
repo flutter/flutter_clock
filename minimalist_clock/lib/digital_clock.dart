@@ -8,7 +8,6 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:flutter/foundation.dart';
 import 'animated_two_digits.dart';
 
 enum _Element {
@@ -40,15 +39,26 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock>
     with TickerProviderStateMixin {
-  DateTime _dateTime = DateTime.parse("1969-07-20 00:00:04Z");
+  DateTime _dateTime =
+      DateTime.parse("1969-07-20 23:45:04Z").add(new Duration(minutes: 59));
   Timer _timer;
   AnimationController _minuteController;
+  AnimationController _hourController;
+
+  String _minute;
+  String _previousMinute;
+  String _hour;
+  String _previousHour;
 
   @override
   void initState() {
     super.initState();
     widget.model.addListener(_updateModel);
     _minuteController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    _hourController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
     );
@@ -75,6 +85,16 @@ class _DigitalClockState extends State<DigitalClock>
     _minuteController.reset();
   }
 
+  Future _startHourAnimation() async {
+    try {
+      await _hourController.forward().orCancel;
+    } on TickerCanceled {}
+  }
+
+  void _resetHourAnimation() {
+    _hourController.reset();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -94,6 +114,12 @@ class _DigitalClockState extends State<DigitalClock>
   void _updateTime() {
     setState(() {
       _dateTime = _dateTime.add(new Duration(minutes: 1));
+      _minute = DateFormat('mm').format(_dateTime);
+      _previousMinute =
+          DateFormat('mm').format(_dateTime.subtract(new Duration(minutes: 1)));
+      _hour = DateFormat('hh').format(_dateTime);
+      _previousHour =
+          DateFormat('hh').format(_dateTime.subtract(new Duration(hours: 1)));
       // Update once per minute. If you want to update every second, use the
       // following code.
       // _timer = Timer(
@@ -105,15 +131,16 @@ class _DigitalClockState extends State<DigitalClock>
       // Update once per second, but make sure to do it at the beginning of each
       // new second, so that the clock is accurate.
       _timer = Timer(
-        Duration(seconds: 5),
+        Duration(seconds: 1),
         _updateTime,
       );
+      _resetMinuteAnimation();
+      _startMinuteAnimation();
+      if (_dateTime.minute == 00) {
+        _resetHourAnimation();
+        _startHourAnimation();
+      }
     });
-    _startMinuteAnimation();
-    Timer(
-      Duration(seconds: 1),
-      _resetMinuteAnimation,
-    );
   }
 
   @override
@@ -121,11 +148,7 @@ class _DigitalClockState extends State<DigitalClock>
     final colors = Theme.of(context).brightness == Brightness.light
         ? _lightTheme
         : _darkTheme;
-    final hour =
-        DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
-    final minute = DateFormat('mm').format(_dateTime);
-    final previousMinute =
-        DateFormat('mm').format(_dateTime.subtract(new Duration(minutes: 1)));
+
     final fontSize = MediaQuery.of(context).size.height * 0.29;
 
     final thinStyle = TextStyle(
@@ -145,12 +168,15 @@ class _DigitalClockState extends State<DigitalClock>
       child: Stack(
         children: <Widget>[
           Positioned(
-              right: 435,
-              top: MediaQuery.of(context).size.height / 3.45,
-              child: Text(
-                hour,
-                style: boldStyle,
-              )),
+            right: 435,
+            child: AnimatedTwoDigits(_hourController, _previousHour, boldStyle,
+                MediaQuery.of(context).size.height / 3.45, context),
+          ),
+          Positioned(
+            right: 435,
+            child: AnimatedTwoDigits(
+                _hourController, _hour, boldStyle, 0.0, context),
+          ),
           Positioned(
               left: 220,
               top: MediaQuery.of(context).size.height / 3.45,
@@ -160,23 +186,13 @@ class _DigitalClockState extends State<DigitalClock>
               )),
           Positioned(
             left: 440,
-            top: MediaQuery.of(context).size.height / 3.45,
-            child: GestureDetector(
-              child: Text(
-                minute,
-                style: boldStyle,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 440,
-            child: AnimatedTwoDigits(_minuteController, previousMinute,
+            child: AnimatedTwoDigits(_minuteController, _previousMinute,
                 boldStyle, MediaQuery.of(context).size.height / 3.45, context),
           ),
           Positioned(
             left: 440,
             child: AnimatedTwoDigits(
-                _minuteController, minute, boldStyle, 0.0, context),
+                _minuteController, _minute, boldStyle, 0.0, context),
           ),
           Positioned(
             left: 0,
