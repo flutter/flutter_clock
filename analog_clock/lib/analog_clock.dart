@@ -45,6 +45,7 @@ class _AnalogClockState extends State<AnalogClock> {
     super.initState();
     widget.model.addListener(_updateModel);
     // Set the initial values.
+
     _updateTime();
     _updateModel();
   }
