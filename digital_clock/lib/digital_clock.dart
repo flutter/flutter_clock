@@ -15,7 +15,8 @@ enum _Element {
 }
 
 final _lightTheme = {
-  _Element.background: Color(0xFF81B3FE),
+  // _Element.background: Color(0xFF81B3FE),
+  _Element.background: Colors.brown,
   _Element.text: Colors.white,
   _Element.shadow: Colors.black,
 };
@@ -101,7 +102,7 @@ class _DigitalClockState extends State<DigitalClock> {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
+    final fontSize = MediaQuery.of(context).size.width / 6;
     final offset = -fontSize / 7;
     final defaultStyle = TextStyle(
       color: colors[_Element.text],
@@ -126,8 +127,16 @@ class _DigitalClockState extends State<DigitalClock> {
               Positioned(
                 // left: offset,
                 // top: offset,
-                width: 200,
-                height: 200,
+                child: Image(
+                  image: AssetImage('../images/background_light.png'),
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Positioned(
+                // left: offset,
+                // top: offset,
+                width: 220,
+                height: 220,
                 child: RotatedBox(
                   quarterTurns: 3,
                   child: Image(
