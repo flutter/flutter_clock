@@ -39,8 +39,7 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock>
     with TickerProviderStateMixin {
-  DateTime _dateTime =
-      DateTime.parse("1969-07-20 23:45:04Z").add(new Duration(minutes: 59));
+  DateTime _dateTime = DateTime.parse("1969-07-20 23:45:04Z");
   Timer _timer;
   AnimationController _minuteController;
   AnimationController _hourController;
@@ -49,6 +48,7 @@ class _DigitalClockState extends State<DigitalClock>
   String _previousMinute;
   String _hour;
   String _previousHour;
+  String _meridiemLabel;
 
   @override
   void initState() {
@@ -120,16 +120,8 @@ class _DigitalClockState extends State<DigitalClock>
       _hour = DateFormat('hh').format(_dateTime);
       _previousHour =
           DateFormat('hh').format(_dateTime.subtract(new Duration(hours: 1)));
-      // Update once per minute. If you want to update every second, use the
-      // following code.
-      // _timer = Timer(
-      //   Duration(minutes: 1) -
-      //       Duration(seconds: _dateTime.second) -
-      //       Duration(milliseconds: _dateTime.millisecond),
-      //   _updateTime,
-      // );
-      // Update once per second, but make sure to do it at the beginning of each
-      // new second, so that the clock is accurate.
+      _meridiemLabel = _dateTime.hour > 12 ? "PM" : "AM";
+
       _timer = Timer(
         Duration(seconds: 1),
         _updateTime,
@@ -181,7 +173,7 @@ class _DigitalClockState extends State<DigitalClock>
               left: 220,
               top: MediaQuery.of(context).size.height / 3.45,
               child: Text(
-                "PM",
+                _meridiemLabel,
                 style: thinStyle,
               )),
           Positioned(
