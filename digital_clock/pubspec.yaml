@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
   flutter_clock_helper:
     path: ../flutter_clock_helper
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^0.1.3
+  uuid: ^2.0.4
 
 dev_dependencies:
   flutter_test:
