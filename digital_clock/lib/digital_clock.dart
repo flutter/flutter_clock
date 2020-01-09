@@ -105,7 +105,7 @@ class _DigitalClockState extends State<DigitalClock> {
     final offset = -fontSize / 7;
     final defaultStyle = TextStyle(
       color: colors[_Element.text],
-      fontFamily: 'PressStart2P',
+      fontFamily: 'CuteFont',
       fontSize: fontSize,
       shadows: [
         Shadow(
@@ -123,8 +123,24 @@ class _DigitalClockState extends State<DigitalClock> {
           style: defaultStyle,
           child: Stack(
             children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
+              Positioned(
+                // left: offset,
+                // top: offset,
+                width: 200,
+                height: 200,
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Image(
+                    image: AssetImage('../images/record_2.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: offset,
+                top: offset,
+                child: Text(hour + ':' + minute),
+              ),
             ],
           ),
         ),
