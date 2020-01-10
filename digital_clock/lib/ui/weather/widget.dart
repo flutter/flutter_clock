@@ -15,7 +15,7 @@ class Weather extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => _buildBackgroundLayout(
-      child: _buildLayout(
+        child: _buildLayout(
           context: context,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -24,7 +24,9 @@ class Weather extends StatelessWidget {
               _buildWeatherIcon(),
               _buildTemperature(),
             ],
-          )));
+          ),
+        ),
+      );
 
   Widget _buildBackgroundLayout({Widget child}) => ClipRect(
         child: BackdropFilter(
@@ -34,9 +36,9 @@ class Weather extends StatelessWidget {
       );
 
   Widget _buildWeather() => StreamBuilder<String>(
-      stream: settings.weather,
-      initialData: '',
-      builder: (context, snapshot) => Text(
+        stream: settings.weather,
+        initialData: '',
+        builder: (context, snapshot) => Text(
           snapshot.data.isNotEmpty
               // ignore: lines_longer_than_80_chars
               ? '${snapshot.data.substring(0, 1).toUpperCase()}${snapshot.data.substring(1)}'
@@ -46,7 +48,9 @@ class Weather extends StatelessWidget {
                 ? themes.Light.foreground
                 : themes.Dark.foreground,
             fontSize: 16,
-          )));
+          ),
+        ),
+      );
 
   Widget _buildWeatherIcon() => Transform.translate(
         offset: Offset(0, -5),
@@ -94,29 +98,33 @@ class Weather extends StatelessWidget {
       );
 
   Widget _buildTemperature() => StreamBuilder<String>(
-      stream: settings.temperature,
-      initialData: '',
-      builder: (context, snapshot) => Text(snapshot.data,
+        stream: settings.temperature,
+        initialData: '',
+        builder: (context, snapshot) => Text(
+          snapshot.data,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).brightness == Brightness.light
                 ? themes.Light.foreground
                 : themes.Dark.foreground,
             fontSize: 16,
-          )));
+          ),
+        ),
+      );
 
   Widget _buildLayout({Widget child, BuildContext context}) => Container(
         padding: EdgeInsets.all(6),
         width: 220,
         decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light
-                ? themes.Light.background
-                : themes.Dark.background,
-            borderRadius: BorderRadius.all(Radius.circular(6)),
-            border: Border.all(
-                color: Theme.of(context).brightness == Brightness.light
-                    ? themes.Light.border
-                    : themes.Dark.border)),
+          color: Theme.of(context).brightness == Brightness.light
+              ? themes.Light.background
+              : themes.Dark.background,
+          borderRadius: BorderRadius.all(Radius.circular(6)),
+          border: Border.all(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? themes.Light.border
+                  : themes.Dark.border),
+        ),
         child: child,
       );
 }

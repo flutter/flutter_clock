@@ -93,17 +93,13 @@ class _ClockState extends State<Clock> {
       child: child);
 
   Widget _buildClockLayout() => StreamBuilder<bool>(
-      key: Key('clock_layout'),
-      stream: isReady,
-      initialData: false,
-      builder: (context, snapshot) {
-        final isReady = snapshot.data;
-        if (isReady) {
-          return _buildGradientClockGlyphsShadows(child: _buildClockGlyphs());
-        } else {
-          return Container();
-        }
-      });
+        key: Key('clock_layout'),
+        stream: isReady,
+        initialData: false,
+        builder: (context, snapshot) => snapshot.data
+            ? _buildGradientClockGlyphsShadows(child: _buildClockGlyphs())
+            : Container(),
+      );
 
   Widget _buildClockGlyphs() => Stack(
         children: <Widget>[
@@ -141,12 +137,13 @@ class _ClockState extends State<Clock> {
       );
 
   ui.Glyph _buildDivider({Offset offset, Key key}) => ui.Glyph(
-      key: key,
-      time: widget.time,
-      glyph: models.Glyph(value: ':', maxScale: 8)
-        ..changeScale(true)
-        ..changeAutoAnimatePosition(false)
-        ..changePosition(offset));
+        key: key,
+        time: widget.time,
+        glyph: models.Glyph(value: ':', maxScale: 8)
+          ..changeScale(isMustBeScale: true)
+          ..changeAutoAnimatePosition(isPositionMustBeAutoAnimate: false)
+          ..changePosition(offset),
+      );
 
   List<ui.Glyph> _buildTimeGlyphs({List<List<models.Glyph>> timeGlyphsModels}) {
     final _glyphs = <ui.Glyph>[];

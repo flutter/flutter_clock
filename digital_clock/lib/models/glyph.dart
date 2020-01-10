@@ -45,10 +45,8 @@ class Glyph {
 
   void changePosition(Offset offset) => positionChangeController.add(offset);
 
-  // ignore: avoid_positional_boolean_parameters
-  void changeScale(bool isMustBeScale) => scaleController.add(isMustBeScale);
+  void changeScale({bool isMustBeScale}) => scaleController.add(isMustBeScale);
 
-  // ignore: avoid_positional_boolean_parameters
-  void changeAutoAnimatePosition(bool isPositionMustBeAutoAnimate) =>
+  void changeAutoAnimatePosition({bool isPositionMustBeAutoAnimate}) =>
       autoAnimatePositionChangeController.add(isPositionMustBeAutoAnimate);
 }

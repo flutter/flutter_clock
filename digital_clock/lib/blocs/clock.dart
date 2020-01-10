@@ -152,14 +152,15 @@ class Clock {
 
       previousGlyph.scaleController.add(false);
 
-      previousGlyph.changeAutoAnimatePosition(true);
+      previousGlyph.changeAutoAnimatePosition(
+          isPositionMustBeAutoAnimate: true);
 
       changeRandomPositionOfGlyph(previousGlyph);
 
       glyph.changePosition(Offset(leftPosition, topPosition));
       glyph.scaleController.add(true);
 
-      glyph.changeAutoAnimatePosition(false);
+      glyph.changeAutoAnimatePosition(isPositionMustBeAutoAnimate: false);
 
       break;
     }
@@ -177,11 +178,11 @@ class Clock {
 
   void changeHourGlyphsSize() {
     for (models.Glyph glyph in timeGlyphs[TimePositionParts.hourFirstPart]) {
-      glyph.changeScale(false);
+      glyph.changeScale(isMustBeScale: false);
     }
 
     for (models.Glyph glyph in timeGlyphs[TimePositionParts.hourLastPart]) {
-      glyph.changeScale(false);
+      glyph.changeScale(isMustBeScale: false);
     }
   }
 

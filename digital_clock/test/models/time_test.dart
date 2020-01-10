@@ -6,9 +6,7 @@ void main() {
   group('Time model', () {
     models.Time time;
 
-    setUp(() {
-      time = models.Time();
-    });
+    setUp(() => time = models.Time());
 
     testWidgets('can update time parts and notify about that', (tester) async {
       final dateTime = time.dateTime;

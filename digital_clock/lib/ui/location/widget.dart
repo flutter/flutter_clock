@@ -20,19 +20,22 @@ class Location extends StatelessWidget {
       builder: (context, snapshot) => Row(
             children: <Widget>[
               Expanded(
-                  child: Text(snapshot.data,
-                      style: TextStyle(
-                        shadows: [
-                          Theme.of(context).brightness == Brightness.light
-                              ? themes.Light.shadow
-                              : themes.Dark.shadow
-                        ],
-                        color: Theme.of(context).brightness == Brightness.light
-                            ? themes.Light.foreground
-                            : themes.Dark.foreground,
-                        fontSize: 16,
-                        fontFamily: 'Spectral',
-                      ))),
+                child: Text(
+                  snapshot.data,
+                  style: TextStyle(
+                    shadows: [
+                      Theme.of(context).brightness == Brightness.light
+                          ? themes.Light.shadow
+                          : themes.Dark.shadow
+                    ],
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? themes.Light.foreground
+                        : themes.Dark.foreground,
+                    fontSize: 16,
+                    fontFamily: 'Spectral',
+                  ),
+                ),
+              ),
             ],
           ));
 }
