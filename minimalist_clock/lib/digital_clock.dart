@@ -8,7 +8,7 @@ import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'animated_two_digits.dart';
+import 'animated_top_position_container.dart';
 
 enum _Element {
   background,
@@ -51,6 +51,8 @@ class _DigitalClockState extends State<DigitalClock>
   String _previousHour;
   String _meridiemLabel;
   String _previousMeridiemLabel;
+  bool _isNoon;
+  bool _isMidnight;
 
   @override
   void initState() {
@@ -150,6 +152,8 @@ class _DigitalClockState extends State<DigitalClock>
         Duration(seconds: 1),
         _updateTime,
       );
+      _isNoon = _dateTime.minute == 0 && _dateTime.hour == 12;
+      _isMidnight = _dateTime.minute == 0 && _dateTime.hour == 00;
     });
 
     if (_dateTime.minute != previousMinuteValue) {
@@ -194,37 +198,75 @@ class _DigitalClockState extends State<DigitalClock>
         children: <Widget>[
           Positioned(
             right: 435,
-            child: AnimatedTwoDigits(_hourController, _previousHour, boldStyle,
-                MediaQuery.of(context).size.height / 3.45, context),
+            child: AnimatedTopPositionContainer(
+                _hourController,
+                Text(
+                  _previousHour,
+                  style: boldStyle,
+                ),
+                MediaQuery.of(context).size.height / 3.45,
+                boldStyle.fontSize,
+                context),
           ),
           Positioned(
             right: 435,
-            child: AnimatedTwoDigits(
-                _hourController, _hour, boldStyle, 0.0, context),
-          ),
-          Positioned(
-            left: 220,
-            child: AnimatedTwoDigits(
-                _meridiemController,
-                _previousMeridiemLabel,
-                thinStyle,
-                MediaQuery.of(context).size.height / 3.45,
+            child: AnimatedTopPositionContainer(
+                _hourController,
+                Text(
+                  _hour,
+                  style: boldStyle,
+                ),
+                0.0,
+                boldStyle.fontSize,
                 context),
           ),
           Positioned(
             left: 220,
-            child: AnimatedTwoDigits(
-                _meridiemController, _meridiemLabel, thinStyle, 0.0, context),
+            child: AnimatedTopPositionContainer(
+                _meridiemController,
+                Text(
+                  _previousMeridiemLabel,
+                  style: thinStyle,
+                ),
+                MediaQuery.of(context).size.height / 3.45,
+                thinStyle.fontSize,
+                context),
+          ),
+          Positioned(
+            left: 220,
+            child: AnimatedTopPositionContainer(
+                _meridiemController,
+                Text(
+                  _meridiemLabel,
+                  style: thinStyle,
+                ),
+                0.0,
+                thinStyle.fontSize,
+                context),
           ),
           Positioned(
             left: 440,
-            child: AnimatedTwoDigits(_minuteController, _previousMinute,
-                boldStyle, MediaQuery.of(context).size.height / 3.45, context),
+            child: AnimatedTopPositionContainer(
+                _minuteController,
+                Text(
+                  _previousMinute,
+                  style: boldStyle,
+                ),
+                MediaQuery.of(context).size.height / 3.45,
+                boldStyle.fontSize,
+                context),
           ),
           Positioned(
             left: 440,
-            child: AnimatedTwoDigits(
-                _minuteController, _minute, boldStyle, 0.0, context),
+            child: AnimatedTopPositionContainer(
+                _minuteController,
+                Text(
+                  _minute,
+                  style: boldStyle,
+                ),
+                0.0,
+                boldStyle.fontSize,
+                context),
           ),
           Positioned(
             left: 0,
