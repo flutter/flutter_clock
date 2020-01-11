@@ -39,16 +39,18 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock>
     with TickerProviderStateMixin {
-  DateTime _dateTime = DateTime.parse("1969-07-20 23:45:04Z");
+  DateTime _dateTime = DateTime.parse("1969-07-20 11:45:04Z");
   Timer _timer;
   AnimationController _minuteController;
   AnimationController _hourController;
+  AnimationController _meridiemController;
 
   String _minute;
   String _previousMinute;
   String _hour;
   String _previousHour;
   String _meridiemLabel;
+  String _previousMeridiemLabel;
 
   @override
   void initState() {
@@ -62,7 +64,11 @@ class _DigitalClockState extends State<DigitalClock>
       duration: Duration(seconds: 1),
       vsync: this,
     );
-    _dateTime.subtract(new Duration(minutes: 1));
+
+    _meridiemController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
 
     _updateTime();
     _resetHourAnimation();
@@ -99,6 +105,16 @@ class _DigitalClockState extends State<DigitalClock>
     _hourController.reset();
   }
 
+  Future _startMeridiemAnimation() async {
+    try {
+      await _meridiemController.forward().orCancel;
+    } on TickerCanceled {}
+  }
+
+  void _resetMeridiemAnimation() {
+    _meridiemController.reset();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -118,6 +134,7 @@ class _DigitalClockState extends State<DigitalClock>
   void _updateTime() {
     var previousMinuteValue = _dateTime.minute;
     var previousHourValue = _dateTime.hour;
+    var previousMeridiemValue = _meridiemLabel;
     setState(() {
       // _dateTime = DateTime.now();
       _dateTime = _dateTime.add(new Duration(minutes: 1));
@@ -127,16 +144,15 @@ class _DigitalClockState extends State<DigitalClock>
       _hour = DateFormat('hh').format(_dateTime);
       _previousHour =
           DateFormat('hh').format(_dateTime.subtract(new Duration(hours: 1)));
-      _meridiemLabel = _dateTime.hour > 12 ? "PM" : "AM";
-
+      _meridiemLabel = _dateTime.hour >= 12 ? "PM" : "AM";
+      _previousMeridiemLabel = _dateTime.hour < 12 ? "PM" : "AM";
       _timer = Timer(
         Duration(seconds: 1),
         _updateTime,
       );
     });
 
-    if (previousMinuteValue != null &&
-        _dateTime.minute != previousMinuteValue) {
+    if (_dateTime.minute != previousMinuteValue) {
       _resetMinuteAnimation();
       _startMinuteAnimation();
     }
@@ -144,6 +160,11 @@ class _DigitalClockState extends State<DigitalClock>
     if (_dateTime.hour != previousHourValue) {
       _resetHourAnimation();
       _startHourAnimation();
+    }
+
+    if (_meridiemLabel != previousMeridiemValue) {
+      _resetMeridiemAnimation();
+      _startMeridiemAnimation();
     }
   }
 
@@ -182,12 +203,19 @@ class _DigitalClockState extends State<DigitalClock>
                 _hourController, _hour, boldStyle, 0.0, context),
           ),
           Positioned(
-              left: 220,
-              top: MediaQuery.of(context).size.height / 3.45,
-              child: Text(
-                _meridiemLabel,
-                style: thinStyle,
-              )),
+            left: 220,
+            child: AnimatedTwoDigits(
+                _meridiemController,
+                _previousMeridiemLabel,
+                thinStyle,
+                MediaQuery.of(context).size.height / 3.45,
+                context),
+          ),
+          Positioned(
+            left: 220,
+            child: AnimatedTwoDigits(
+                _meridiemController, _meridiemLabel, thinStyle, 0.0, context),
+          ),
           Positioned(
             left: 440,
             child: AnimatedTwoDigits(_minuteController, _previousMinute,
