@@ -57,7 +57,6 @@ class _DigitalClockState extends State<DigitalClock>
   @override
   void initState() {
     super.initState();
-    widget.model.addListener(_updateModel);
     _minuteController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
@@ -80,16 +79,6 @@ class _DigitalClockState extends State<DigitalClock>
     _updateTime();
     _resetHourAnimation();
     _startHourAnimation();
-    _updateModel();
-  }
-
-  @override
-  void didUpdateWidget(DigitalClock oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.model != oldWidget.model) {
-      oldWidget.model.removeListener(_updateModel);
-      widget.model.addListener(_updateModel);
-    }
   }
 
   Future _startMinuteAnimation() async {
@@ -138,16 +127,7 @@ class _DigitalClockState extends State<DigitalClock>
   void dispose() {
     _timer?.cancel();
     _minuteController?.dispose();
-
-    widget.model.removeListener(_updateModel);
-    widget.model.dispose();
     super.dispose();
-  }
-
-  void _updateModel() {
-    setState(() {
-      // Cause the clock to rebuild when the model changes.
-    });
   }
 
   void _updateTime() {
