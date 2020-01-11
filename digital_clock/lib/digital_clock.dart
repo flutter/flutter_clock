@@ -15,7 +15,8 @@ enum _Element {
 }
 
 final _lightTheme = {
-  _Element.background: Color(0xFF81B3FE),
+  // _Element.background: Color(0xFF81B3FE),
+  _Element.background: Colors.brown,
   _Element.text: Colors.white,
   _Element.shadow: Colors.black,
 };
@@ -101,11 +102,11 @@ class _DigitalClockState extends State<DigitalClock> {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
     final minute = DateFormat('mm').format(_dateTime);
-    final fontSize = MediaQuery.of(context).size.width / 3.5;
+    final fontSize = MediaQuery.of(context).size.width / 6;
     final offset = -fontSize / 7;
     final defaultStyle = TextStyle(
       color: colors[_Element.text],
-      fontFamily: 'PressStart2P',
+      fontFamily: 'CuteFont',
       fontSize: fontSize,
       shadows: [
         Shadow(
@@ -123,8 +124,32 @@ class _DigitalClockState extends State<DigitalClock> {
           style: defaultStyle,
           child: Stack(
             children: <Widget>[
-              Positioned(left: offset, top: 0, child: Text(hour)),
-              Positioned(right: offset, bottom: offset, child: Text(minute)),
+              Positioned(
+                // left: offset,
+                // top: offset,
+                child: Image(
+                  image: AssetImage('../images/background_light.png'),
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Positioned(
+                // left: offset,
+                // top: offset,
+                width: 220,
+                height: 220,
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Image(
+                    image: AssetImage('../images/record_2.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: offset,
+                top: offset,
+                child: Text(hour + ':' + minute),
+              ),
             ],
           ),
         ),
