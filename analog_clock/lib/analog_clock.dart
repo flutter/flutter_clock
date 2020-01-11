@@ -156,10 +156,14 @@ class _AnalogClockState extends State<AnalogClock> {
                         ),
                       ),
                     ),
-                    Image.asset(
-                      "../images/Tonearm.png",
-                      height: 100,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 165, top: 20),
+                      child: Image.asset(
+                        "../images/Tonearm.png",
+                        height: 150,
+                      ),
                     ),
+                    Text(MediaQuery.of(context).size.toString()),
                   ],
                 ),
               ],
