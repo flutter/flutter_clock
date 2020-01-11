@@ -62,7 +62,11 @@ class _DigitalClockState extends State<DigitalClock>
       duration: Duration(seconds: 1),
       vsync: this,
     );
+    _dateTime.subtract(new Duration(minutes: 1));
+
     _updateTime();
+    _resetHourAnimation();
+    _startHourAnimation();
     _updateModel();
   }
 
@@ -112,7 +116,10 @@ class _DigitalClockState extends State<DigitalClock>
   }
 
   void _updateTime() {
+    var previousMinuteValue = _dateTime.minute;
+    var previousHourValue = _dateTime.hour;
     setState(() {
+      // _dateTime = DateTime.now();
       _dateTime = _dateTime.add(new Duration(minutes: 1));
       _minute = DateFormat('mm').format(_dateTime);
       _previousMinute =
@@ -126,13 +133,18 @@ class _DigitalClockState extends State<DigitalClock>
         Duration(seconds: 1),
         _updateTime,
       );
+    });
+
+    if (previousMinuteValue != null &&
+        _dateTime.minute != previousMinuteValue) {
       _resetMinuteAnimation();
       _startMinuteAnimation();
-      if (_dateTime.minute == 00) {
-        _resetHourAnimation();
-        _startHourAnimation();
-      }
-    });
+    }
+
+    if (_dateTime.hour != previousHourValue) {
+      _resetHourAnimation();
+      _startHourAnimation();
+    }
   }
 
   @override
