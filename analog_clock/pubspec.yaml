@@ -11,6 +11,7 @@ dependencies:
   flutter_clock_helper:
     path: ../flutter_clock_helper
   cupertino_icons: ^0.1.2
+  flukit: ^1.0.2
 
 dev_dependencies:
   flutter_test:

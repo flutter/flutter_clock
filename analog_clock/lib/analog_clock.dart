@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:intl/intl.dart';
 import 'package:vector_math/vector_math_64.dart' show radians;
-
+import 'package:flukit/flukit.dart';
 import 'container_hand.dart';
 import 'drawn_hand.dart';
 
@@ -136,8 +136,16 @@ class _AnalogClockState extends State<AnalogClock> {
         color: customTheme.backgroundColor,
         child: Stack(
           children: [
-            Image(
-              image: AssetImage("../images/record_2.png"),
+            // Image(
+            //   image: AssetImage("../images/record_2.png"),
+            // ),
+
+            TurnBox(
+              turns: _now.second * radiansPerTick,
+              speed: 9000,
+              child: Image(
+                image: AssetImage("../images/record_2.png"),
+              ),
             ),
             // Example of a hand drawn with [CustomPainter].
             // DrawnHand(
