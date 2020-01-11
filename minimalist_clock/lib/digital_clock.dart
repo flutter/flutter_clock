@@ -39,11 +39,12 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock>
     with TickerProviderStateMixin {
-  DateTime _dateTime = DateTime.parse("1969-07-20 11:45:04Z");
+  DateTime _dateTime = DateTime.parse("1969-07-20 11:56:04Z");
   Timer _timer;
   AnimationController _minuteController;
   AnimationController _hourController;
   AnimationController _meridiemController;
+  AnimationController _noonController;
 
   String _minute;
   String _previousMinute;
@@ -51,8 +52,7 @@ class _DigitalClockState extends State<DigitalClock>
   String _previousHour;
   String _meridiemLabel;
   String _previousMeridiemLabel;
-  bool _isNoon;
-  bool _isMidnight;
+  bool _isSpecialTime;
 
   @override
   void initState() {
@@ -68,6 +68,11 @@ class _DigitalClockState extends State<DigitalClock>
     );
 
     _meridiemController = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _noonController = AnimationController(
       duration: Duration(seconds: 1),
       vsync: this,
     );
@@ -117,6 +122,18 @@ class _DigitalClockState extends State<DigitalClock>
     _meridiemController.reset();
   }
 
+  Future _startNoonAnimation() async {
+    try {
+      await _noonController.forward().orCancel;
+    } on TickerCanceled {}
+  }
+
+  Future _reverseNoonAnimation() async {
+    try {
+      await _noonController.reverse().orCancel;
+    } on TickerCanceled {}
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -137,9 +154,27 @@ class _DigitalClockState extends State<DigitalClock>
     var previousMinuteValue = _dateTime.minute;
     var previousHourValue = _dateTime.hour;
     var previousMeridiemValue = _meridiemLabel;
+    var wasNoon = _isSpecialTime;
     setState(() {
       // _dateTime = DateTime.now();
       _dateTime = _dateTime.add(new Duration(minutes: 1));
+      _isSpecialTime = _dateTime.minute == 0 &&
+          (_dateTime.hour == 12 || _dateTime.hour == 0);
+      _timer = Timer(
+        Duration(seconds: 2),
+        _updateTime,
+      );
+    });
+
+    if (_isSpecialTime) {
+      _startNoonAnimation();
+      return;
+    }
+    if (!_isSpecialTime && wasNoon == true) {
+      _reverseNoonAnimation();
+    }
+    setState(() {
+      // _dateTime = DateTime.now();
       _minute = DateFormat('mm').format(_dateTime);
       _previousMinute =
           DateFormat('mm').format(_dateTime.subtract(new Duration(minutes: 1)));
@@ -148,27 +183,25 @@ class _DigitalClockState extends State<DigitalClock>
           DateFormat('hh').format(_dateTime.subtract(new Duration(hours: 1)));
       _meridiemLabel = _dateTime.hour >= 12 ? "PM" : "AM";
       _previousMeridiemLabel = _dateTime.hour < 12 ? "PM" : "AM";
-      _timer = Timer(
-        Duration(seconds: 1),
-        _updateTime,
-      );
-      _isNoon = _dateTime.minute == 0 && _dateTime.hour == 12;
-      _isMidnight = _dateTime.minute == 0 && _dateTime.hour == 00;
     });
 
-    if (_dateTime.minute != previousMinuteValue) {
-      _resetMinuteAnimation();
-      _startMinuteAnimation();
-    }
+    if (!_isSpecialTime && wasNoon == true) {
+      _reverseNoonAnimation();
+    } else {
+      if (_dateTime.minute != previousMinuteValue) {
+        _resetMinuteAnimation();
+        _startMinuteAnimation();
+      }
 
-    if (_dateTime.hour != previousHourValue) {
-      _resetHourAnimation();
-      _startHourAnimation();
-    }
+      if (_dateTime.hour != previousHourValue) {
+        _resetHourAnimation();
+        _startHourAnimation();
+      }
 
-    if (_meridiemLabel != previousMeridiemValue) {
-      _resetMeridiemAnimation();
-      _startMeridiemAnimation();
+      if (_meridiemLabel != previousMeridiemValue) {
+        _resetMeridiemAnimation();
+        _startMeridiemAnimation();
+      }
     }
   }
 
@@ -192,82 +225,108 @@ class _DigitalClockState extends State<DigitalClock>
       fontWeight: FontWeight.bold,
     );
 
+    final specialTimeStyle = TextStyle(
+      color: colors[_Element.text],
+      fontFamily: 'MontSerrat',
+      fontSize: fontSize * 0.8,
+    );
+
+    final digitDisplayStack = Stack(
+      children: <Widget>[
+        Positioned(
+          right: 435,
+          child: AnimatedTopPositionContainer(
+              _hourController,
+              Text(
+                _previousHour,
+                style: boldStyle,
+              ),
+              MediaQuery.of(context).size.height / 3.45,
+              fontSize,
+              context),
+        ),
+        Positioned(
+          right: 435,
+          child: AnimatedTopPositionContainer(
+              _hourController,
+              Text(
+                _hour,
+                style: boldStyle,
+              ),
+              0.0,
+              fontSize,
+              context),
+        ),
+        Positioned(
+          left: 220,
+          child: AnimatedTopPositionContainer(
+              _meridiemController,
+              Text(
+                _previousMeridiemLabel,
+                style: thinStyle,
+              ),
+              MediaQuery.of(context).size.height / 3.45,
+              fontSize,
+              context),
+        ),
+        Positioned(
+          left: 220,
+          child: AnimatedTopPositionContainer(
+              _meridiemController,
+              Text(
+                _meridiemLabel,
+                style: thinStyle,
+              ),
+              0.0,
+              fontSize,
+              context),
+        ),
+        Positioned(
+          left: 440,
+          child: AnimatedTopPositionContainer(
+              _minuteController,
+              Text(
+                _previousMinute,
+                style: boldStyle,
+              ),
+              MediaQuery.of(context).size.height / 3.45,
+              fontSize,
+              context),
+        ),
+        Positioned(
+          left: 440,
+          child: AnimatedTopPositionContainer(
+              _minuteController,
+              Text(
+                _minute,
+                style: boldStyle,
+              ),
+              0.0,
+              fontSize,
+              context),
+        ),
+      ],
+    );
+
+    final specialTimeLabel = _dateTime.hour == 12 ? 'noon.' : 'midnight.';
+
     return Container(
       color: colors[_Element.background],
       child: Stack(
         children: <Widget>[
           Positioned(
-            right: 435,
+            left: 0,
+            right: 0,
             child: AnimatedTopPositionContainer(
-                _hourController,
-                Text(
-                  _previousHour,
-                  style: boldStyle,
-                ),
-                MediaQuery.of(context).size.height / 3.45,
-                boldStyle.fontSize,
-                context),
-          ),
-          Positioned(
-            right: 435,
-            child: AnimatedTopPositionContainer(
-                _hourController,
-                Text(
-                  _hour,
-                  style: boldStyle,
-                ),
+                _noonController,
+                Text(specialTimeLabel,
+                    style: specialTimeStyle, textAlign: TextAlign.center),
                 0.0,
-                boldStyle.fontSize,
+                fontSize,
                 context),
           ),
-          Positioned(
-            left: 220,
-            child: AnimatedTopPositionContainer(
-                _meridiemController,
-                Text(
-                  _previousMeridiemLabel,
-                  style: thinStyle,
-                ),
-                MediaQuery.of(context).size.height / 3.45,
-                thinStyle.fontSize,
-                context),
-          ),
-          Positioned(
-            left: 220,
-            child: AnimatedTopPositionContainer(
-                _meridiemController,
-                Text(
-                  _meridiemLabel,
-                  style: thinStyle,
-                ),
-                0.0,
-                thinStyle.fontSize,
-                context),
-          ),
-          Positioned(
-            left: 440,
-            child: AnimatedTopPositionContainer(
-                _minuteController,
-                Text(
-                  _previousMinute,
-                  style: boldStyle,
-                ),
-                MediaQuery.of(context).size.height / 3.45,
-                boldStyle.fontSize,
-                context),
-          ),
-          Positioned(
-            left: 440,
-            child: AnimatedTopPositionContainer(
-                _minuteController,
-                Text(
-                  _minute,
-                  style: boldStyle,
-                ),
-                0.0,
-                boldStyle.fontSize,
-                context),
-          ),
+          AnimatedTopPositionContainer(
+              _noonController, digitDisplayStack, 0.0, fontSize, context),
           Positioned(
             left: 0,
             right: 0,
