@@ -72,7 +72,7 @@ packages:
   flutter_clock_helper:
     dependency: "direct main"
     description:
-      path: "..\\flutter_clock_helper"
+      path: "../flutter_clock_helper"
       relative: true
     source: path
     version: "1.0.0+1"
