@@ -133,19 +133,36 @@ class _AnalogClockState extends State<AnalogClock> {
         value: time,
       ),
       child: Container(
-        color: customTheme.backgroundColor,
+        color: Colors.transparent,
         child: Stack(
           children: [
             // Image(
             //   image: AssetImage("../images/record_2.png"),
             // ),
-
-            TurnBox(
-              turns: _now.second * radiansPerTick,
-              speed: 9000,
-              child: Image(
-                image: AssetImage("../images/record_2.png"),
-              ),
+            Image(
+              image: AssetImage("../images/background_light.png"),
+            ),
+            Row(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(30),
+                      child: TurnBox(
+                        turns: _now.second * radiansPerTick,
+                        speed: 10000,
+                        child: Image(
+                          image: AssetImage("../images/record_2.png"),
+                        ),
+                      ),
+                    ),
+                    Image.asset(
+                      "../images/Tonearm.png",
+                      height: 100,
+                    ),
+                  ],
+                ),
+              ],
             ),
             // Example of a hand drawn with [CustomPainter].
             // DrawnHand(
