@@ -145,6 +145,7 @@ class _AnalogClockState extends State<AnalogClock> {
             Row(
               children: <Widget>[
                 Stack(
+                  alignment: AlignmentDirectional.topEnd,
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.all(30),
@@ -157,7 +158,7 @@ class _AnalogClockState extends State<AnalogClock> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 165, top: 20),
+                      padding: const EdgeInsets.only(top: 20),
                       child: Image.asset(
                         "../images/Tonearm.png",
                         height: 150,
@@ -166,6 +167,36 @@ class _AnalogClockState extends State<AnalogClock> {
                     Text(MediaQuery.of(context).size.toString()),
                   ],
                 ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset(
+                        "../images/knob.png",
+                        height: 50,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                      ],
+                    ),
+                  ],
+                )
               ],
             ),
             // Example of a hand drawn with [CustomPainter].
