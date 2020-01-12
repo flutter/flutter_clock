@@ -25,20 +25,18 @@ final _darkTheme = {
   _Element.text: Colors.white,
 };
 
-/// A basic digital clock.
-///
-/// You can do better than this!
-class DigitalClock extends StatefulWidget {
-  const DigitalClock(this.model);
+class MinimalistClock extends StatefulWidget {
+  const MinimalistClock(this.model);
 
   final ClockModel model;
 
   @override
-  _DigitalClockState createState() => _DigitalClockState();
+  _MinimalistClockState createState() => _MinimalistClockState();
 }
 
-class _DigitalClockState extends State<DigitalClock>
+class _MinimalistClockState extends State<MinimalistClock>
     with TickerProviderStateMixin {
+  //DateTime _dateTime = DateTime.now();
   DateTime _dateTime = DateTime.parse("1969-07-20 06:58:04Z");
   Timer _timer;
   AnimationController _minuteController;
@@ -92,9 +90,7 @@ class _DigitalClockState extends State<DigitalClock>
   }
 
   Future _startMinuteAnimation() async {
-    try {
-      await _minuteController.forward().orCancel;
-    } on TickerCanceled {}
+    await _minuteController.forward().orCancel;
   }
 
   void _resetMinuteAnimation() {
@@ -102,9 +98,7 @@ class _DigitalClockState extends State<DigitalClock>
   }
 
   Future _startHourAnimation() async {
-    try {
-      await _hourController.forward().orCancel;
-    } on TickerCanceled {}
+    await _hourController.forward().orCancel;
   }
 
   void _resetHourAnimation() {
@@ -112,9 +106,7 @@ class _DigitalClockState extends State<DigitalClock>
   }
 
   Future _startMeridiemAnimation() async {
-    try {
-      await _meridiemController.forward().orCancel;
-    } on TickerCanceled {}
+    await _meridiemController.forward().orCancel;
   }
 
   void _resetMeridiemAnimation() {
@@ -122,33 +114,29 @@ class _DigitalClockState extends State<DigitalClock>
   }
 
   Future _startNoonAnimation() async {
-    try {
-      await _specialTimeController.forward().orCancel;
-    } on TickerCanceled {}
+    await _specialTimeController.forward().orCancel;
   }
 
   Future _reverseNoonAnimation() async {
-    try {
-      await _specialTimeController.reverse().orCancel;
-    } on TickerCanceled {}
+    await _specialTimeController.reverse().orCancel;
   }
 
   Future _startThemeAnimation() async {
-    try {
-      await _themeController.forward().orCancel;
-    } on TickerCanceled {}
+    await _themeController.forward().orCancel;
   }
 
   Future _reverseThemeAnimation() async {
-    try {
-      await _themeController.reverse().orCancel;
-    } on TickerCanceled {}
+    await _themeController.reverse().orCancel;
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     _minuteController?.dispose();
+    _hourController?.dispose();
+    _meridiemController?.dispose();
+    _specialTimeController?.dispose();
+    _themeController?.dispose();
     super.dispose();
   }
 
@@ -176,7 +164,7 @@ class _DigitalClockState extends State<DigitalClock>
       _isSpecialTime = _dateTime.minute == 0 &&
           (_dateTime.hour == 12 || _dateTime.hour == 0);
       _timer = Timer(
-        Duration(seconds: 5),
+        Duration(seconds: 2),
         _updateTime,
       );
     });
@@ -207,7 +195,7 @@ class _DigitalClockState extends State<DigitalClock>
     if (_dateTime.minute == 0 && _dateTime.hour == 7) {
       _reverseThemeAnimation();
       Timer(
-        _themeController.duration * 0.8714,
+        _themeController.duration * 0.87,
         updateTimeStateValues,
       );
       return;
@@ -382,7 +370,6 @@ class _DigitalClockState extends State<DigitalClock>
       );
     }
 
-    // return mainClock(_darkTheme);
     return Container(
       child: Stack(
         children: <Widget>[
