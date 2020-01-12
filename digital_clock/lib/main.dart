@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'models/time.dart' as models;
-import 'screens/clock.dart' as screens;
+import 'screens/clock/widget.dart' as screens;
 
 void main() {
   // A temporary measure until Platform supports web and TargetPlatform supports
