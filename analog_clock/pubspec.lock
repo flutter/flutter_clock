@@ -64,6 +64,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  digital_clock:
+    dependency: "direct main"
+    description:
+      path: "..\\digital_clock"
+      relative: true
+    source: path
+    version: "1.0.0+1"
   flukit:
     dependency: "direct main"
     description:
