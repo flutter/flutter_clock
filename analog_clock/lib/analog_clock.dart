@@ -48,6 +48,7 @@ class _AnalogClockState extends State<AnalogClock> {
         _recordPlayerSizeKey.currentContext.findRenderObject();
     recordPlayerSize = _recordPlayerSizeBox.size;
     print('$recordPlayerSize'); ///////////////////
+    setState(() {});
   }
 
   @override
@@ -108,6 +109,8 @@ class _AnalogClockState extends State<AnalogClock> {
     //  - Create your own [ThemeData], demonstrated in [AnalogClock].
     //  - Create a map of [Color]s to custom keys, demonstrated in
     //    [DigitalClock].
+    _getContainerSize(); //
+
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.

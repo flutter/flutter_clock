@@ -10,8 +10,8 @@ dependencies:
     sdk: flutter
   flutter_clock_helper:
     path: ../flutter_clock_helper
-  digital_clock:
-    path: ../digital_clock
+  # digital_clock:
+  #   path: ../digital_clock
   cupertino_icons: ^0.1.2
   flukit: ^1.0.2
 
