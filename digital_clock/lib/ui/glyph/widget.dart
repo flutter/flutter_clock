@@ -137,7 +137,7 @@ class _GlyphState extends State<Glyph> with TickerProviderStateMixin {
             overflow: Overflow.visible,
             children: <Widget>[
               AnimatedPositioned(
-                duration: Duration(milliseconds: 3000),
+                duration: Duration(milliseconds: 6000),
                 curve: Curves.elasticOut,
                 top: random.nextInt(widget.glyph.maxMoveRange).toDouble(),
                 left: random.nextInt(widget.glyph.maxMoveRange).toDouble(),
