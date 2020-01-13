@@ -40,17 +40,6 @@ class _AnalogClockState extends State<AnalogClock> {
   var _location = '';
   Timer _timer;
 
-  Size recordPlayerSize;
-  GlobalKey _recordPlayerSizeKey = GlobalKey();
-
-  _getContainerSize() {
-    RenderBox _recordPlayerSizeBox =
-        _recordPlayerSizeKey.currentContext.findRenderObject();
-    recordPlayerSize = _recordPlayerSizeBox.size;
-    print('$recordPlayerSize'); ///////////////////
-    setState(() {});
-  }
-
   @override
   void initState() {
     super.initState();
@@ -59,8 +48,6 @@ class _AnalogClockState extends State<AnalogClock> {
 
     _updateTime();
     _updateModel();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => _getContainerSize());
   }
 
   @override
@@ -109,8 +96,6 @@ class _AnalogClockState extends State<AnalogClock> {
     //  - Create your own [ThemeData], demonstrated in [AnalogClock].
     //  - Create a map of [Color]s to custom keys, demonstrated in
     //    [DigitalClock].
-    _getContainerSize(); //
-
     final customTheme = Theme.of(context).brightness == Brightness.light
         ? Theme.of(context).copyWith(
             // Hour hand.
@@ -148,84 +133,71 @@ class _AnalogClockState extends State<AnalogClock> {
         value: time,
       ),
       child: Container(
-        key: _recordPlayerSizeKey,
         color: Colors.transparent,
         child: Stack(
           children: [
+            // Image(
+            //   image: AssetImage("../images/record_2.png"),
+            // ),
             Image(
               image: AssetImage("../images/background_light.png"),
             ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: recordPlayerSize.height * 0.05,
-                  horizontal: recordPlayerSize.height * 0.1),
-              //開模擬器要先註解
-              child: Row(
-                children: <Widget>[
-                  Stack(
-                    alignment: AlignmentDirectional.topEnd,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            height: recordPlayerSize.height * 0.8,
-                            //開模擬器要先註解
-                            child: TurnBox(
-                              turns: _now.second * radiansPerTick,
-                              speed: 10000,
-                              child: Image(
-                                image: AssetImage("../images/record_2.png"),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: recordPlayerSize.height * 0.1,
-                            //開模擬器要先註解
-                          ),
-                        ],
-                      ),
-                      Image.asset(
-                        "../images/Tonearm.png",
-                        height: recordPlayerSize.height * 0.8,
-                        //開模擬器要先註解
-                      ),
-                      Text('$recordPlayerSize'), ////////////////////
-                      Text('\n' +
-                          MediaQuery.of(context).size.toString()), ///////////
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Image.asset(
-                          "../images/knob.png",
-                          height: 50,
+            Row(
+              children: <Widget>[
+                Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(30),
+                      child: TurnBox(
+                        turns: _now.second * radiansPerTick,
+                        speed: 10000,
+                        child: Image(
+                          image: AssetImage("../images/record_2.png"),
                         ),
                       ),
-                      SizedBox(
-                        height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Image.asset(
+                        "../images/Tonearm.png",
+                        height: 150,
                       ),
-                      Row(
-                        children: <Widget>[
-                          Image.asset(
-                            "../images/track.png",
-                            height: 120,
-                          ),
-                          Image.asset(
-                            "../images/track.png",
-                            height: 120,
-                          ),
-                          Image.asset(
-                            "../images/track.png",
-                            height: 120,
-                          ),
-                        ],
+                    ),
+                    Text(MediaQuery.of(context).size.toString()),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset(
+                        "../images/knob.png",
+                        height: 50,
                       ),
-                    ],
-                  )
-                ],
-              ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                        Image.asset(
+                          "../images/track.png",
+                          height: 120,
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              ],
             ),
             // Example of a hand drawn with [CustomPainter].
             // DrawnHand(
