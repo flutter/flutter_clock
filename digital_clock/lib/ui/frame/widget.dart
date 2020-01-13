@@ -9,19 +9,20 @@ import 'themes/light.dart' as themes;
 
 class Frame extends StatelessWidget {
   @override
-  Widget build(
-          BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light
-          ? CustomPaint(
-              painter: painters.Frame(
-                  firstColor: themes.Light.foreground,
-                  firstShadowColor: themes.Light.foregroundShadow,
-                  secondColor: themes.Light.background,
-                  secondShadowColor: themes.Light.backgroundShadow))
-          : CustomPaint(
-              painter: painters.Frame(
-                  firstColor: themes.Dark.foreground,
-                  firstShadowColor: themes.Dark.foregroundShadow,
-                  secondColor: themes.Dark.background,
-                  secondShadowColor: themes.Dark.backgroundShadow));
+  Widget build(BuildContext context) => Container(
+        key: Key('frame'),
+        child: Theme.of(context).brightness == Brightness.light
+            ? CustomPaint(
+                painter: painters.Frame(
+                    firstColor: themes.Light.foreground,
+                    firstShadowColor: themes.Light.foregroundShadow,
+                    secondColor: themes.Light.background,
+                    secondShadowColor: themes.Light.backgroundShadow))
+            : CustomPaint(
+                painter: painters.Frame(
+                    firstColor: themes.Dark.foreground,
+                    firstShadowColor: themes.Dark.foregroundShadow,
+                    secondColor: themes.Dark.background,
+                    secondShadowColor: themes.Dark.backgroundShadow)),
+      );
 }

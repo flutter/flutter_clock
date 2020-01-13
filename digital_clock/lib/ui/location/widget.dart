@@ -12,7 +12,8 @@ class Location extends StatelessWidget {
   const Location(this.settings);
 
   @override
-  Widget build(BuildContext context) => _buildText();
+  Widget build(BuildContext context) =>
+      Container(key: Key('location'), child: _buildText());
 
   Widget _buildText() => StreamBuilder<String>(
       stream: settings.location,

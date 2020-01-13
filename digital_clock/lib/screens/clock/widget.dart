@@ -59,9 +59,14 @@ class _ClockState extends State<Clock> {
     });
   }
 
+  bool isDisposed = false;
+
   @override
   void dispose() {
-    widget.time.dispose();
+    isDisposed = true;
+
+    if (!isDisposed) widget.time.dispose();
+
     clock.dispose();
     settings.dispose();
     super.dispose();

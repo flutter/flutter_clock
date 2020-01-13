@@ -14,16 +14,19 @@ class Weather extends StatelessWidget {
   const Weather(this.settings);
 
   @override
-  Widget build(BuildContext context) => _buildBackgroundLayout(
-        child: _buildLayout(
-          context: context,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              _buildWeather(),
-              _buildWeatherIcon(),
-              _buildTemperature(),
-            ],
+  Widget build(BuildContext context) => Container(
+        key: Key('weather'),
+        child: _buildBackgroundLayout(
+          child: _buildLayout(
+            context: context,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _buildWeather(),
+                _buildWeatherIcon(),
+                _buildTemperature(),
+              ],
+            ),
           ),
         ),
       );

@@ -51,7 +51,10 @@ class Clock {
     });
   }
 
+  bool isNotDisposed = false;
+
   void dispose() {
+    isNotDisposed = true;
     time.removeListener(timeChangeListener);
 
     for (TimePositionParts part in timeGlyphs.keys) {

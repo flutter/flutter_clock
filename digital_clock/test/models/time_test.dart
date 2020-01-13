@@ -43,7 +43,7 @@ void main() {
       final firstOfSecondPart = time.second.firstPart;
       final lastOfSecondPart = time.second.lastPart;
 
-      await tester.runAsync(() => Future.delayed(Duration(seconds: 1)));
+      await tester.runAsync(() => Future.delayed(Duration(seconds: 2)));
 
       expect(firstOfSecondPart == time.second.firstPart, isTrue);
       expect(lastOfSecondPart != time.second.lastPart, isTrue);
