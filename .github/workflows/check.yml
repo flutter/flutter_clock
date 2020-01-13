@@ -1,0 +1,76 @@
+name: check
+on: [push]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1.1.1
+        with:
+          flutter-version: '1.9.x'
+          channel: 'dev'
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload test artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: application
+          path: .
+
+  coverage:
+
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Download test artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: application
+
+      - name: Install lcov
+        run: sudo apt install -y lcov
+
+      - name: Prepare coverage
+        working-directory: application
+        run: genhtml coverage/lcov.info -o coverage
+
+#  codemetrics:
+#
+#    needs: [test]
+#    runs-on: ubuntu-latest
+#
+#    container:
+#      image:  google/dart:latest
+#
+#    steps:
+#      - uses: actions/checkout@v1
+#
+#      - name: Download test artifact
+#        uses: actions/download-artifact@v1
+#        with:
+#          name: application
+#
+#      - name: Install codemetrics
+#        working-directory: application
+#        run: pub global activate --source git https://github.com/Hecatoncheir/codemetrics.git
+#
+#      - run: pub cache add async -v 2.3.0
+#      - run: pub cache add petitparser -v 2.4.0
+#
+#      - name: Run codemetrics
+#        working-directory: application
+#        run: dart-codemetrics --begin-warning-complexity-number=4 --begin-error-complexity-number=8
