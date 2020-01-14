@@ -36,8 +36,7 @@ class MinimalistClock extends StatefulWidget {
 
 class _MinimalistClockState extends State<MinimalistClock>
     with TickerProviderStateMixin {
-  //DateTime _dateTime = DateTime.now();
-  DateTime _dateTime = DateTime.parse("1969-07-20 06:58:04Z");
+  DateTime _dateTime = DateTime.now();
   Timer _timer;
   AnimationController _minuteController;
   AnimationController _hourController;
@@ -159,8 +158,7 @@ class _MinimalistClockState extends State<MinimalistClock>
     var previousMeridiemValue = _meridiemLabel;
     var wasNoon = _isSpecialTime;
     setState(() {
-      // _dateTime = DateTime.now();
-      _dateTime = _dateTime.add(new Duration(minutes: 1));
+      _dateTime = DateTime.now();
       _isSpecialTime = _dateTime.minute == 0 &&
           (_dateTime.hour == 12 || _dateTime.hour == 0);
       _timer = Timer(
@@ -187,7 +185,7 @@ class _MinimalistClockState extends State<MinimalistClock>
     if (_dateTime.minute == 0 && _dateTime.hour == 19) {
       _startThemeAnimation();
       Timer(
-        _themeController.duration,
+        _themeController.duration * 0.1,
         updateTimeStateValues,
       );
       return;
@@ -195,7 +193,7 @@ class _MinimalistClockState extends State<MinimalistClock>
     if (_dateTime.minute == 0 && _dateTime.hour == 7) {
       _reverseThemeAnimation();
       Timer(
-        _themeController.duration * 0.87,
+        _themeController.duration * 0.8714,
         updateTimeStateValues,
       );
       return;
