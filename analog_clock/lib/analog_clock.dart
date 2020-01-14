@@ -12,6 +12,7 @@ import 'package:vector_math/vector_math_64.dart' show radians;
 import 'package:flukit/flukit.dart';
 import 'container_hand.dart';
 import 'drawn_hand.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 /// Total distance traveled by a second or a minute hand, each second or minute,
 /// respectively.
@@ -87,6 +88,7 @@ class _AnalogClockState extends State<AnalogClock> {
     });
   }
 
+  var kedovalue = 0;
   @override
   Widget build(BuildContext context) {
     // There are many ways to apply themes to your clock. Some are:
@@ -171,9 +173,31 @@ class _AnalogClockState extends State<AnalogClock> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      child: Image.asset(
-                        "../images/knob.png",
-                        height: 50,
+                      child: Stack(
+                        children: <Widget>[
+                          TurnBox(
+                            turns: kedovalue / 100,
+                            speed: 0,
+                            child: Image.asset(
+                              "../images/knob_light.png",
+                              height: 50,
+                            ),
+                          ),
+                          SleekCircularSlider(
+                            initialValue: 0,
+                            appearance: CircularSliderAppearance(
+                              angleRange: 359,
+                              startAngle: 270,
+                              size: 50,
+                              infoProperties: InfoProperties(),
+                            ),
+                            onChange: (double value) {
+                              kedovalue = value.toInt();
+                              print(kedovalue);
+                            },
+                          ),
+                          Text("$kedovalue"),
+                        ],
                       ),
                     ),
                     SizedBox(

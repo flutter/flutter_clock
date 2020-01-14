@@ -14,6 +14,7 @@ dependencies:
   #   path: ../digital_clock
   cupertino_icons: ^0.1.2
   flukit: ^1.0.2
+  sleek_circular_slider: ^1.0.7
 
 dev_dependencies:
   flutter_test:
