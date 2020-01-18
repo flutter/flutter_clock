@@ -1,5 +1,12 @@
 import 'dart:math';
 
+/// Automatically creates pixels with the initial value being the [points].
+///
+/// [counter] is used to add the ids to the units.
+Iterable<PixelDisplay> createPixelDisplayFromPoints(
+        List<Point> points, PixelDisplayCounter counter) =>
+    points.map((x) => PixelDisplay(counter.getNextInSequence())..list.add(x));
+
 /// Holds the information on how to display a pixel, the basic building
 /// block of the snake clock.
 class PixelDisplay {
@@ -17,25 +24,28 @@ class PixelDisplay {
   /// [addedY] is added in full to the midpoint of the interpolation, falling
   /// to zero at either end.
   Point createPoint(double value, [double addedY]) {
-    if (list.length == 1) {
-      return list[0];
+
+    final list2 = [list[0], list[0]];
+
+    if (list2.length == 1) {
+      return list2[0];
     }
 
     assert(value >= 0 && value <= 1);
 
     if (value >= 1) {
-      list.removeAt(0);
+      list2.removeAt(0);
 
-      return list[0];
+      return list2[0];
     }
 
     if (value == 0) {
-      return list[0];
+      return list2[0];
     }
 
     final deltaY = (1 - (0.5 - value).abs() * 2) * addedY;
 
-    final interpolation = list[0] * (1 - value) + list[1] * value;
+    final interpolation = list2[0] * (1 - value) + list2[1] * value;
 
     return Point(interpolation.x, interpolation.y + deltaY);
   }
