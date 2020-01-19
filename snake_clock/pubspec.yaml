@@ -1,9 +1,9 @@
-name: digital_clock
-description: Digital clock.
-version: 1.0.0+1
+name: snake_clock
+description: Snake clock.
+version: 1.0.0
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:

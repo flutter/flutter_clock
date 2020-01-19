@@ -1,13 +1,10 @@
-import 'package:digital_clock/model/number_pixels.dart';
-import 'package:digital_clock/view/pixel_manager.dart';
-import 'package:digital_clock/view/pixel_painter.dart';
+import 'package:snake_clock/view/constants.dart';
+import 'package:snake_clock/view/pixel_manager.dart';
+import 'package:snake_clock/view/pixel_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_clock_helper/model.dart';
-
-const _pixelWidth = clockDisplayWidth * 0.19 / pixelWidthCount;
-const _pixelHeight = clockDisplayHeight * 0.5 / pixelHeightCount;
 
 class SnakeClock extends StatefulWidget {
   final ClockModel clockModel;
@@ -24,7 +21,7 @@ class _SnakeClockState extends State<SnakeClock> with TickerProviderStateMixin {
   AnimationController controller;
 
   num minute;
-  num hour;
+  num second;
 
   @override
   void initState() {
@@ -32,15 +29,22 @@ class _SnakeClockState extends State<SnakeClock> with TickerProviderStateMixin {
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
     minute = DateTime.now().minute;
+    second = DateTime.now().second;
 
-    pixelManager.updateTimeDisplayed(widget.clockModel);
+    pixelManager.createInitialTime(widget.clockModel);
 
     controller =
         AnimationController(duration: Duration(seconds: 2), vsync: this);
     controller.repeat(reverse: true);
 
     controller.addListener(() {
-      if (minute != DateTime.now().minute) {
+      final dateTime = DateTime.now();
+      if(second != dateTime.second){
+        second = dateTime.second;
+        pixelManager.secondUpdated(second);
+      }
+      if (minute != dateTime.minute) {
+        minute = dateTime.minute;
         pixelManager.minuteUpdated(widget.clockModel);
       }
     });
@@ -64,22 +68,21 @@ class _SnakeClockState extends State<SnakeClock> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
 
-    return LayoutBuilder(builder: (_, _a) {
-      return Container(
-          color: brightness == Brightness.dark ? Colors.black : Colors.white,
-          child: AnimatedBuilder(
-              animation: controller,
-              builder: (_, _a) => Opacity(
-                  opacity: 0.4 + controller.value * 0.6,
-                  child: CustomPaint(
-                      painter: PixelPainter(
-                          pixelManager.createFrame(DateTime.now()),
-                          brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.black,
-                          _pixelWidth,
-                          _pixelHeight),
-                      child: Container()))));
-    });
+    return ClipRect(
+        child: Container(
+            color: brightness == Brightness.dark ? Colors.black : Colors.white,
+            child: AnimatedBuilder(
+                animation: controller,
+                builder: (_, _a) => Opacity(
+                    opacity: 0.5 + controller.value * 0.5,
+                    child: CustomPaint(
+                        painter: PixelPainter(
+                            pixelManager.createFrame(DateTime.now()),
+                            brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                            pixelWidth,
+                            pixelHeight),
+                        child: Container())))));
   }
 }

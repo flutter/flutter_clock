@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:digital_clock/model/embedded_rectangle.dart';
+import 'package:snake_clock/model/embedded_rectangle.dart';
 import 'package:tuple/tuple.dart';
 
 /// Holds the 4 embedded rectangles used to represent a main clock display.

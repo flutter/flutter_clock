@@ -23,31 +23,34 @@ class PixelDisplay {
   ///
   /// [addedY] is added in full to the midpoint of the interpolation, falling
   /// to zero at either end.
-  Point createPoint(double value, [double addedY]) {
-
-    final list2 = [list[0], list[0]];
-
-    if (list2.length == 1) {
-      return list2[0];
+  Point createPoint(double value, [double addedY = 0]) {
+    if (list.length == 1) {
+      return list[0];
     }
 
     assert(value >= 0 && value <= 1);
 
     if (value >= 1) {
-      list2.removeAt(0);
+      list.removeAt(0);
 
-      return list2[0];
+      return list[0];
     }
 
     if (value == 0) {
-      return list2[0];
+      return list[0];
     }
 
-    final deltaY = (1 - (0.5 - value).abs() * 2) * addedY;
+    if (addedY == 0) {
+      return list[0] * (1 - value) + list[1] * value;
+    }
 
-    final interpolation = list2[0] * (1 - value) + list2[1] * value;
+    final midPoint = (list[0] + list[1]) * 0.5;
+    final extraPoint = Point(midPoint.x, midPoint.y + addedY);
 
-    return Point(interpolation.x, interpolation.y + deltaY);
+    //return list[0] * (1 - value) + list[1] * value;
+    return list[0] * pow((1 - value), 2) +
+        extraPoint * 2 * (1 - value) * value +
+        list[1] * pow(value, 2);
   }
 }
 
