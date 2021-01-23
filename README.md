@@ -14,9 +14,13 @@
 <li><a href="https://github.com/flutter/flutter_clock/blob/master/analog_clock"><b>Analog Clock</b></a></li>
 
 <img src='analog_clock/analog.gif' width='350'>
-<br>
+<br><br>
 
 <li><a href="https://github.com/flutter/flutter_clock/blob/master/digital_clock"><b>Digital Clock</b></a></li>
 
 <img src='digital_clock/digital.gif' width='350'>
 </ul>
+
+<br>
+
+<a href="https://twitter.com/intent/tweet?hashtags=FlutterClock&amp;url=https://flutter.dev/clock"><b>Share #FlutterClock with friends</b>
