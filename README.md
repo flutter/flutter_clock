@@ -11,12 +11,12 @@
 
 ## Examples
 <ul>
-<li><a href="https://github.com/flutter/flutter_clock/blob/master/analog_clock">Analog Clock</a></li>
+<li><a href="https://github.com/flutter/flutter_clock/blob/master/analog_clock"><b>Analog Clock</b></a></li>
 
 <img src='analog_clock/analog.gif' width='350'>
 <br>
 
-<li><a href="https://github.com/flutter/flutter_clock/blob/master/digital_clock">Digital Clock</a></li>
+<li><a href="https://github.com/flutter/flutter_clock/blob/master/digital_clock"><b>Digital Clock</b></a></li>
 
 <img src='digital_clock/digital.gif' width='350'>
 </ul>
