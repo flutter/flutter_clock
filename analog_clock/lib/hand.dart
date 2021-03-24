@@ -13,12 +13,10 @@ abstract class Hand extends StatelessWidget {
   ///
   /// All of the parameters are required and must not be null.
   const Hand({
-    @required this.color,
-    @required this.size,
-    @required this.angleRadians,
-  })  : assert(color != null),
-        assert(size != null),
-        assert(angleRadians != null);
+    required this.color,
+    required this.size,
+    required this.angleRadians,
+  });
 
   /// Hand color.
   final Color color;

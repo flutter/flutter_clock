@@ -40,7 +40,7 @@ class DigitalClock extends StatefulWidget {
 
 class _DigitalClockState extends State<DigitalClock> {
   DateTime _dateTime = DateTime.now();
-  Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -110,7 +110,7 @@ class _DigitalClockState extends State<DigitalClock> {
       shadows: [
         Shadow(
           blurRadius: 0,
-          color: colors[_Element.shadow],
+          color: colors[_Element.shadow]!,
           offset: Offset(10, 0),
         ),
       ],
