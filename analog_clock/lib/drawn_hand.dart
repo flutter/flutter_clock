@@ -18,15 +18,11 @@ class DrawnHand extends Hand {
   ///
   /// All of the parameters are required and must not be null.
   const DrawnHand({
-    @required Color color,
-    @required this.thickness,
-    @required double size,
-    @required double angleRadians,
-  })  : assert(color != null),
-        assert(thickness != null),
-        assert(size != null),
-        assert(angleRadians != null),
-        super(
+    required Color color,
+    required this.thickness,
+    required double size,
+    required double angleRadians,
+  }) : super(
           color: color,
           size: size,
           angleRadians: angleRadians,
@@ -55,15 +51,11 @@ class DrawnHand extends Hand {
 /// [CustomPainter] that draws a clock hand.
 class _HandPainter extends CustomPainter {
   _HandPainter({
-    @required this.handSize,
-    @required this.lineWidth,
-    @required this.angleRadians,
-    @required this.color,
-  })  : assert(handSize != null),
-        assert(lineWidth != null),
-        assert(angleRadians != null),
-        assert(color != null),
-        assert(handSize >= 0.0),
+    required this.handSize,
+    required this.lineWidth,
+    required this.angleRadians,
+    required this.color,
+  })   : assert(handSize >= 0.0),
         assert(handSize <= 1.0);
 
   double handSize;

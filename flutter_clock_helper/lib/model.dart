@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 ///
 /// Contestants: Do not edit this.
 class ClockModel extends ChangeNotifier {
-  get is24HourFormat => _is24HourFormat;
+  bool get is24HourFormat => _is24HourFormat;
   bool _is24HourFormat = true;
   set is24HourFormat(bool is24HourFormat) {
     if (_is24HourFormat != is24HourFormat) {
@@ -23,7 +23,7 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Current location String, for example 'Mountain View, CA'.
-  get location => _location;
+  String get location => _location;
   String _location = 'Mountain View, CA';
   set location(String location) {
     if (location != _location) {
@@ -33,7 +33,7 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Current temperature string, for example '22°C'.
-  get temperature => _convertFromCelsius(_temperature);
+  num get temperature => _convertFromCelsius(_temperature);
   // Stored in degrees celsius, and converted based on the current unit setting
   num _temperature = 22.0;
   set temperature(num temperature) {
@@ -47,7 +47,7 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Daily high temperature, for example '26'.
-  get high => _convertFromCelsius(_high);
+  num get high => _convertFromCelsius(_high);
   // Stored in degrees celsius, and converted based on the current unit setting
   num _high = 26.0;
   set high(num high) {
@@ -59,7 +59,7 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Daily low temperature, for example '19'.
-  get low => _convertFromCelsius(_low);
+  num get low => _convertFromCelsius(_low);
   num _low = 19.0;
   set low(num low) {
     low = _convertToCelsius(low);
@@ -70,9 +70,9 @@ class ClockModel extends ChangeNotifier {
   }
 
   /// Weather condition text for the current weather, for example  'cloudy'.
-  WeatherCondition get weatherCondition => _weatherCondition;
-  WeatherCondition _weatherCondition = WeatherCondition.sunny;
-  set weatherCondition(WeatherCondition weatherCondition) {
+  WeatherCondition? get weatherCondition => _weatherCondition;
+  WeatherCondition? _weatherCondition = WeatherCondition.sunny;
+  set weatherCondition(WeatherCondition? weatherCondition) {
     if (weatherCondition != _weatherCondition) {
       _weatherCondition = weatherCondition;
       notifyListeners();
@@ -83,9 +83,9 @@ class ClockModel extends ChangeNotifier {
   String get weatherString => enumToString(weatherCondition);
 
   /// Temperature unit, for example 'celsius'.
-  TemperatureUnit get unit => _unit;
-  TemperatureUnit _unit = TemperatureUnit.celsius;
-  set unit(TemperatureUnit unit) {
+  TemperatureUnit? get unit => _unit;
+  TemperatureUnit? _unit = TemperatureUnit.celsius;
+  set unit(TemperatureUnit? unit) {
     if (unit != _unit) {
       _unit = unit;
       notifyListeners();
@@ -125,7 +125,6 @@ class ClockModel extends ChangeNotifier {
       case TemperatureUnit.celsius:
       default:
         return degreesCelsius;
-        break;
     }
   }
 
@@ -136,7 +135,6 @@ class ClockModel extends ChangeNotifier {
       case TemperatureUnit.celsius:
       default:
         return degrees;
-        break;
     }
   }
 }
@@ -159,4 +157,4 @@ enum TemperatureUnit {
 }
 
 /// Removes the enum type and returns the value as a String.
-String enumToString(Object e) => e.toString().split('.').last;
+String enumToString(Object? e) => e.toString().split('.').last;

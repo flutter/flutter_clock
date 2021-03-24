@@ -16,20 +16,18 @@ class ContainerHand extends Hand {
   ///
   /// All of the parameters are required and must not be null.
   const ContainerHand({
-    @required Color color,
-    @required double size,
-    @required double angleRadians,
+    required Color color,
+    required double size,
+    required double angleRadians,
     this.child,
-  })  : assert(size != null),
-        assert(angleRadians != null),
-        super(
+  }) : super(
           color: color,
           size: size,
           angleRadians: angleRadians,
         );
 
   /// The child widget used as the clock hand and rotated by [angleRadians].
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
